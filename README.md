@@ -178,116 +178,97 @@ sequenceDiagram
 ### 技术组件详细架构
 
 ```mermaid
-graph LR
-    subgraph "前端层"
-        A[API客户端]
-        B[测试脚本]
-        C[命令行工具]
+graph TB
+    %% 用户交互层
+    subgraph "用户交互层"
+        UI[Web界面/API客户端]
+        CLI[命令行工具]
     end
-
-    subgraph "API服务层 - FastAPI"
-        D[rag_audit_api.py]
-        E[路由处理]
-        F[请求验证]
-        G[错误处理]
+    
+    %% API网关层
+    subgraph "API服务层"
+        API["FastAPI服务器\nrag_audit_api.py"]
+        HEALTH["/health\n健康检查"]
+        ANALYZE["/analyze\n合约分析"]
+        INGEST["/ingest\n批量上传"]
+        ASK["/ask\n智能问答"]
     end
-
-    subgraph "业务逻辑层"
-        H[合约分析逻辑]
-        I[文档处理逻辑]
-        J[向量化处理]
-        K[问答逻辑]
+    
+    %% 核心处理层
+    subgraph "智能合约分析引擎"
+        SLITHER[Slither静态分析<br/>安全漏洞检测]
+        ECHIDNA[Echidna模糊测试<br/>属性验证]
+        PARSER[报告解析器<br/>flatten_slither/echidna]
     end
-
-    subgraph "分析工具层"
-        L[Slither v0.9.3<br/>静态分析]
-        M[Echidna<br/>模糊测试]
-        N[Solidity编译器]
+    
+    %% AI处理层
+    subgraph "AI智能处理层"
+        GEMINI[Google Gemini AI]
+        EMBED[文本向量化<br/>embedding-001]
+        GEN[文本生成<br/>gemini-pro]
     end
-
-    subgraph "AI服务层 - Google Gemini"
-        O[embedding-001<br/>文本向量化]
-        P[gemini-pro<br/>文本生成]
-        Q[重试机制<br/>错误处理]
+    
+    %% 数据存储层
+    subgraph "数据存储层"
+        SUPABASE[(Supabase数据库)]
+        VECTORS[(audit_vectors表\n向量存储)]
+        SEARCH["向量相似度搜索\nmatch_documents()"]
     end
-
-    subgraph "数据存储层 - Supabase"
-        R[(PostgreSQL数据库)]
-        S[pgvector扩展<br/>向量存储]
-        T[audit_vectors表<br/>768维向量]
-        U[match_documents()<br/>相似度搜索]
+    
+    %% 外部服务
+    subgraph "外部服务"
+        ETHERSCAN[Etherscan API<br/>合约源码获取]
+        GITHUB[GitHub<br/>代码仓库]
     end
-
-    subgraph "外部API"
-        V[Etherscan API<br/>合约源码]
-        W[GitHub API<br/>代码仓库]
-    end
-
-    subgraph "配置与环境"
-        X[环境变量<br/>API密钥]
-        Y[日志系统<br/>错误追踪]
-        Z[测试框架<br/>pytest]
-    end
-
-    %% 连接关系
-    A --> D
-    B --> D
-    C --> D
-
-    D --> E
-    E --> F
-    F --> G
-
-    D --> H
-    D --> I
-    D --> J
-    D --> K
-
-    H --> L
-    H --> M
-    H --> N
-    H --> V
-
-    I --> O
-    J --> O
-    K --> O
-    K --> P
-
-    O --> Q
-    P --> Q
-
-    J --> S
-    K --> U
-    S --> R
-    U --> R
-    T --> R
-
-    H --> W
-
-    D --> X
-    D --> Y
-    G --> Y
-
-    B --> Z
-
-    %% 样式
-    classDef frontend fill:#e3f2fd
-    classDef api fill:#f3e5f5
-    classDef business fill:#fff8e1
-    classDef analysis fill:#e8f5e8
-    classDef ai fill:#fce4ec
-    classDef data fill:#f1f8e9
-    classDef external fill:#fff3e0
-    classDef config fill:#f9fbe7
-
-    class A,B,C frontend
-    class D,E,F,G api
-    class H,I,J,K business
-    class L,M,N analysis
-    class O,P,Q ai
-    class R,S,T,U data
-    class V,W external
-    class X,Y,Z config
+    
+    %% 数据流连接
+    UI --> API
+    CLI --> API
+    
+    API --> HEALTH
+    API --> ANALYZE
+    API --> INGEST
+    API --> ASK
+    
+    %% 分析流程
+    ANALYZE --> SLITHER
+    ANALYZE --> ECHIDNA
+    ANALYZE --> ETHERSCAN
+    
+    SLITHER --> PARSER
+    ECHIDNA --> PARSER
+    
+    %% 数据处理流程
+    PARSER --> EMBED
+    INGEST --> EMBED
+    EMBED --> GEMINI
+    EMBED --> VECTORS
+    
+    %% 问答流程
+    ASK --> EMBED
+    ASK --> SEARCH
+    SEARCH --> VECTORS
+    VECTORS --> GEN
+    GEN --> GEMINI
+    
+    %% 存储连接
+    VECTORS --> SUPABASE
+    SEARCH --> SUPABASE
+    
+    %% 样式定义
+    classDef userLayer fill:#e1f5fe
+    classDef apiLayer fill:#f3e5f5
+    classDef analysisLayer fill:#fff3e0
+    classDef aiLayer fill:#e8f5e8
+    classDef dataLayer fill:#fce4ec
+    classDef externalLayer fill:#f1f8e9
+    
+    class UI,CLI userLayer
+    class API,HEALTH,ANALYZE,INGEST,ASK apiLayer
+    class SLITHER,ECHIDNA,PARSER analysisLayer
+    class GEMINI,EMBED,GEN aiLayer
+    class SUPABASE,VECTORS,SEARCH dataLayer
+    class ETHERSCAN,GITHUB externalLayer
 ```
 
 ### 核心技术组件
