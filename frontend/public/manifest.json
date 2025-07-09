@@ -1,0 +1,16 @@
+{
+  "name": "RAG Audit System",
+  "short_name": "RAG Audit",
+  "description": "智能合约安全审计平台",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#3B82F6",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -27,7 +27,6 @@ __pycache__/
 *.sqlite-wal
 *.solin
 
-*.pdf
 *.xlsx
 *.docx
 *.pptx
@@ -37,17 +36,13 @@ __pycache__/
 *.csv
 *.tsv
 *.txt
-*.md
 *.rst
 *.tex
 *.html
 *.htm
 *.xml
-*.json
 *.yaml
 *.yml
-*.ini
-*.conf
 *.cfg
 *.log
 *.log.*
