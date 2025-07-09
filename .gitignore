@@ -35,14 +35,11 @@ __pycache__/
 *.odp
 *.csv
 *.tsv
-*.txt
 *.rst
 *.tex
 *.html
 *.htm
 *.xml
-*.yaml
-*.yml
 *.cfg
 *.log
 *.log.*
