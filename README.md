@@ -46,13 +46,18 @@ graph TB
         CLI[命令行工具]
     end
     
-    %% API网关层
+   %% API网关层
     subgraph "API服务层"
-        API[FastAPI服务器<br/>rag_audit_api.py]
-        HEALTH[/health - 健康检查]
-        ANALYZE[/analyze - 合约分析]
-        INGEST[/ingest - 批量上传]
-        ASK[/ask - 智能问答]
+        API["FastAPI服务器\nrag_audit_api.py"]
+        HEALTH["/health\n健康检查"]
+        ANALYZE["/analyze\n合约分析"]
+        INGEST["/ingest\n批量上传"]
+        ASK["/ask\n智能问答"]
+
+        API --> HEALTH
+        API --> ANALYZE
+        API --> INGEST
+        API --> ASK
     end
     
     %% 核心处理层
