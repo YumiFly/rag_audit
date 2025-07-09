@@ -77,8 +77,8 @@ graph TB
     %% 数据存储层
     subgraph "数据存储层"
         SUPABASE[(Supabase数据库)]
-        VECTORS[(audit_vectors表<br/>向量存储)]
-        SEARCH[向量相似度搜索<br/>match_documents()]
+        VECTORS[(audit_vectors表\n向量存储)]
+        SEARCH["向量相似度搜索\nmatch_documents()"]
     end
     
     %% 外部服务
